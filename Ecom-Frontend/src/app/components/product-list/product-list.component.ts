@@ -1,3 +1,4 @@
+import { SearchComponent } from './../search/search.component';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../model/product';
 import { Component, OnInit } from '@angular/core';
@@ -11,8 +12,10 @@ import { ActivatedRoute, Params } from '@angular/router';
 export class ProductListComponent implements OnInit {
 
   products!: Product[];
-
+  keyword!: string;
   CurrentCategoryId!: number;
+  isSearch!: boolean;
+  notFound!: boolean;
 
   constructor(private productService: ProductService, private route: ActivatedRoute) { }
 
@@ -22,6 +25,18 @@ export class ProductListComponent implements OnInit {
     });
   }
   listProducts() {
+
+    this.isSearch = this.route.snapshot.paramMap.has('keyword');
+    if (this.isSearch) {
+      this.handerSearchListProduct();
+
+    } else {
+      this.handerListProduct();
+
+    }
+  }
+
+  handerListProduct() {
     const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
 
 
@@ -35,6 +50,14 @@ export class ProductListComponent implements OnInit {
         this.products = data;
       });
     }
+  }
+  handerSearchListProduct() {
+
+    var keyword = this.route.snapshot.paramMap.get("keyword")!;
+    this.productService.getProductListByName(keyword).subscribe((data) => {
+      this.products = data;
+    });
+    console.log(this.products);
 
   }
 }

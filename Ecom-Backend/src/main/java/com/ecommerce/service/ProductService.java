@@ -60,4 +60,22 @@ public class ProductService {
 		}
 		return productDTOs;
 	}
+
+	public List<ProductDTO> getAllProductByName(String name, Integer pageNo, Integer pageSize, String sortBy) {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		Page<Product> products = repository.findByNameContaining(name, paging);
+//		List<Product> products = repository.findAll();
+		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
+//		if(products.hasContent()) {
+//            return products.getContent();
+//        } else {
+//            return new ArrayList<EmployeeEntity>();
+//        }
+		for (Product product : products.getContent()) {
+			ProductDTO prodto = ProductDTO.valueOf(product);
+			productDTOs.add(prodto);
+
+		}
+		return productDTOs;
+	}
 }

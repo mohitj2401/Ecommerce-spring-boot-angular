@@ -53,4 +53,18 @@ public class ProductController {
 		return new ResponseEntity<>(products, HttpStatus.OK);
 
 	}
+
+	@GetMapping("/search/{name}")
+	public ResponseEntity<List<ProductDTO>> getAllProductByCategory(@PathVariable String name,
+			@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize,
+			@RequestParam(defaultValue = "id") String sortBy) {
+		List<ProductDTO> products = service.getAllProductByName(name, pageNo, pageSize, sortBy);
+		if (products.isEmpty()) {
+
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+		}
+		return new ResponseEntity<>(products, HttpStatus.OK);
+
+	}
 }
