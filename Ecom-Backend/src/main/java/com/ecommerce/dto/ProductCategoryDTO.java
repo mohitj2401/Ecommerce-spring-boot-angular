@@ -1,8 +1,5 @@
 package com.ecommerce.dto;
 
-import java.util.Set;
-
-import com.ecommerce.entity.Product;
 import com.ecommerce.entity.ProductCategory;
 
 public class ProductCategoryDTO {
@@ -10,7 +7,7 @@ public class ProductCategoryDTO {
 
 	private String categoryName;
 
-	private Set<Product> products;
+//	private Set<Product> products;
 
 	public Long getId() {
 		return id;
@@ -28,13 +25,13 @@ public class ProductCategoryDTO {
 		this.categoryName = categoryName;
 	}
 
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(Set<Product> products) {
-		this.products = products;
-	}
+//	public Set<Product> getProducts() {
+//		return products;
+//	}
+//
+//	public void setProducts(Set<Product> products) {
+//		this.products = products;
+//	}
 
 	public ProductCategory createEntity() {
 		ProductCategory proCat = new ProductCategory();
@@ -47,7 +44,7 @@ public class ProductCategoryDTO {
 		ProductCategoryDTO proCatDTO = new ProductCategoryDTO();
 		proCatDTO.setCategoryName(productCat.getCategoryName());
 		proCatDTO.setId(productCat.getId());
-		proCatDTO.setProducts(productCat.getProducts());
+//		proCatDTO.setProducts(productCat.getProducts());
 		return proCatDTO;
 	}
 

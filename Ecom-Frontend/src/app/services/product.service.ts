@@ -8,7 +8,8 @@ import { Product } from '../model/product';
 })
 export class ProductService {
 
-  private baseUrl = "http://localhost:8080/api/products";
+  private baseUrl = "http://localhost:8080/api/products?pageSize=10&pageNo=2";
+  private categoryUrl = "http://localhost:8080/api/products/category/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -24,5 +25,16 @@ export class ProductService {
     }));
 
   }
+  getProductListByCategory(categoryId: number): Observable<Product[]> {
+    return this.httpClient.get<Product[]>(this.categoryUrl + categoryId).pipe(map((response) => {
 
+      return response;
+    }), catchError(e => {
+      console.log(e["status"]);
+
+
+      return [];
+    }));
+
+  }
 }

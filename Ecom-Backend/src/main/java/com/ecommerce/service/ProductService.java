@@ -6,6 +6,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.dto.ProductDTO;
@@ -20,16 +24,40 @@ public class ProductService {
 	@Autowired
 	ProductRepository repository;
 
-	public List<ProductDTO> getAllProduct() {
-
-		List<Product> products = repository.findAll();
+	public List<ProductDTO> getAllProduct(Integer pageNo, Integer pageSize, String sortBy) {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		Page<Product> products = repository.findAll(paging);
+//		List<Product> products = repository.findAll();
 		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
-		for (Product product : products) {
+//		if(products.hasContent()) {
+//            return products.getContent();
+//        } else {
+//            return new ArrayList<EmployeeEntity>();
+//        }
+		for (Product product : products.getContent()) {
 			ProductDTO prodto = ProductDTO.valueOf(product);
 			productDTOs.add(prodto);
 
 		}
 		return productDTOs;
 
+	}
+
+	public List<ProductDTO> getAllProductByCategory(Long categoryId, Integer pageNo, Integer pageSize, String sortBy) {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		Page<Product> products = repository.findByCategoryId(categoryId, paging);
+//		List<Product> products = repository.findAll();
+		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
+//		if(products.hasContent()) {
+//            return products.getContent();
+//        } else {
+//            return new ArrayList<EmployeeEntity>();
+//        }
+		for (Product product : products.getContent()) {
+			ProductDTO prodto = ProductDTO.valueOf(product);
+			productDTOs.add(prodto);
+
+		}
+		return productDTOs;
 	}
 }

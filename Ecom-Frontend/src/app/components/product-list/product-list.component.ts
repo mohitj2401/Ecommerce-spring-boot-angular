@@ -1,6 +1,7 @@
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../model/product';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -11,16 +12,29 @@ export class ProductListComponent implements OnInit {
 
   products!: Product[];
 
-  constructor(private productService: ProductService) { }
+  CurrentCategoryId!: number;
+
+  constructor(private productService: ProductService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.listProducts();
-    throw new Error('Method not implemented.');
+    this.route.params.subscribe(() => {
+      this.listProducts();
+    });
   }
   listProducts() {
-    this.productService.getProductList().subscribe((data) => {
+    const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
 
-      this.products = data;
-    })
+
+    if (hasCategoryId) {
+      this.CurrentCategoryId = +this.route.snapshot.paramMap.get("id")!;
+      this.productService.getProductListByCategory(this.CurrentCategoryId).subscribe((data) => {
+        this.products = data;
+      });
+    } else {
+      this.productService.getProductList().subscribe((data) => {
+        this.products = data;
+      });
+    }
+
   }
 }
