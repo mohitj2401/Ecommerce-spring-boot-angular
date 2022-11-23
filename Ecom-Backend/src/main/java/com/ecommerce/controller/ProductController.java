@@ -67,4 +67,17 @@ public class ProductController {
 		return new ResponseEntity<>(products, HttpStatus.OK);
 
 	}
+
+	@GetMapping("/{productId}")
+	public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
+		ProductDTO product = service.getProductById(productId);
+		if (product == null) {
+
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+		}
+		return new ResponseEntity<>(product, HttpStatus.OK);
+
+	}
+
 }

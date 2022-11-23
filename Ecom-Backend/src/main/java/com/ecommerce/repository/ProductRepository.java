@@ -1,5 +1,7 @@
 package com.ecommerce.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -14,4 +16,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
 	Page<Product> findByCategoryId(@PathVariable Long id, Pageable pagable);
 
 	Page<Product> findByNameContaining(@RequestParam("name") String name, Pageable pagable);
+
+	Optional<Product> findById(Long productId);
 }

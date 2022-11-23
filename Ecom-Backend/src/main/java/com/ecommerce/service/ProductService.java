@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,5 +78,18 @@ public class ProductService {
 
 		}
 		return productDTOs;
+	}
+
+	public ProductDTO getProductById(Long productId) {
+
+		Optional<Product> product = repository.findById(productId);
+//		
+		if (product.isPresent()) {
+			ProductDTO prodto = ProductDTO.valueOf(product.get());
+			return prodto;
+		} else {
+			return null;
+		}
+
 	}
 }
