@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.entity.Product;
+import com.ecommerce.jsonFormat.SimplePage;
 import com.ecommerce.repository.ProductRepository;
 
 @Service
@@ -25,7 +26,7 @@ public class ProductService {
 	@Autowired
 	ProductRepository repository;
 
-	public List<ProductDTO> getAllProduct(Integer pageNo, Integer pageSize, String sortBy) {
+	public SimplePage<ProductDTO> getAllProduct(Integer pageNo, Integer pageSize, String sortBy) {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		Page<Product> products = repository.findAll(paging);
 //		List<Product> products = repository.findAll();
@@ -35,16 +36,20 @@ public class ProductService {
 //        } else {
 //            return new ArrayList<EmployeeEntity>();
 //        }
+
+		products.getPageable();
 		for (Product product : products.getContent()) {
 			ProductDTO prodto = ProductDTO.valueOf(product);
 			productDTOs.add(prodto);
 
 		}
-		return productDTOs;
+		return new SimplePage<>(productDTOs, products.getTotalElements(), paging);
+//		return productDTOs;
 
 	}
 
-	public List<ProductDTO> getAllProductByCategory(Long categoryId, Integer pageNo, Integer pageSize, String sortBy) {
+	public SimplePage<ProductDTO> getAllProductByCategory(Long categoryId, Integer pageNo, Integer pageSize,
+			String sortBy) {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		Page<Product> products = repository.findByCategoryId(categoryId, paging);
 //		List<Product> products = repository.findAll();
@@ -59,10 +64,10 @@ public class ProductService {
 			productDTOs.add(prodto);
 
 		}
-		return productDTOs;
+		return new SimplePage<>(productDTOs, products.getTotalElements(), paging);
 	}
 
-	public List<ProductDTO> getAllProductByName(String name, Integer pageNo, Integer pageSize, String sortBy) {
+	public SimplePage<ProductDTO> getAllProductByName(String name, Integer pageNo, Integer pageSize, String sortBy) {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		Page<Product> products = repository.findByNameContaining(name, paging);
 //		List<Product> products = repository.findAll();
@@ -77,7 +82,7 @@ public class ProductService {
 			productDTOs.add(prodto);
 
 		}
-		return productDTOs;
+		return new SimplePage<>(productDTOs, products.getTotalElements(), paging);
 	}
 
 	public ProductDTO getProductById(Long productId) {
