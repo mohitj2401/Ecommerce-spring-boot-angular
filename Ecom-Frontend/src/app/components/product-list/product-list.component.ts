@@ -1,3 +1,5 @@
+import { CartItem } from './../../model/cart_item';
+import { CartService } from './../../services/cart.service';
 import { SearchComponent } from './../search/search.component';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../model/product';
@@ -24,13 +26,15 @@ export class ProductListComponent implements OnInit {
   totalPage: number = 1;
   toialElements: number = 0;
 
-  constructor(private productService: ProductService, private route: ActivatedRoute) { }
+  constructor(private productService: ProductService, private route: ActivatedRoute, private cartService: CartService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(() => {
       this.listProducts();
     });
   }
+
+
   listProducts() {
 
     this.isSearch = this.route.snapshot.paramMap.has('keyword');
@@ -97,4 +101,11 @@ export class ProductListComponent implements OnInit {
     this.listProducts();
 
   }
+
+  addToCart(product: Product) {
+    let cartItem = new CartItem(product);
+    this.cartService.addToCart(cartItem);
+
+  }
+
 }
