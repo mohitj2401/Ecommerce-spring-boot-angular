@@ -1,3 +1,4 @@
+import { CartService } from './../../services/cart.service';
 import { CustomValidators } from './../../validators/custom-validators';
 import { State } from './../../model/state';
 import { Country } from './../../model/country';
@@ -44,8 +45,13 @@ export class CheckoutComponent {
   get billingAddressCountry() { return this.checkoutFormGroup.get('billingAddress.country'); }
   get billingAddressZipcode() { return this.checkoutFormGroup.get('billingAddress.zipcode'); }
 
+  //CreditCard
+  get creditCardType() { return this.checkoutFormGroup.get('creditCard.cardType'); }
+  get creditCardnameOnCard() { return this.checkoutFormGroup.get('creditCard.nameOnCard'); }
+  get creditCardcardNumber() { return this.checkoutFormGroup.get('creditCard.cardNumber'); }
+  get creditCardsecurityCode() { return this.checkoutFormGroup.get('creditCard.securityCode'); }
 
-  constructor(private formBuilder: FormBuilder, private cardFormService: CardFormService) {
+  constructor(private formBuilder: FormBuilder, private cardFormService: CardFormService, private cartService: CartService) {
   }
 
 
@@ -121,8 +127,6 @@ export class CheckoutComponent {
       creditCard: this.formBuilder.group({
         cardType: ['', [
           Validators.required,
-          Validators.minLength(2),
-          CustomValidators.notOnlyWhiteSpace
         ]],
         nameOnCard: ['', [
           Validators.required,
@@ -131,24 +135,14 @@ export class CheckoutComponent {
         ]],
         cardNumber: ['', [
           Validators.required,
-          Validators.minLength(2),
-          CustomValidators.notOnlyWhiteSpace
+          Validators.pattern('[0-9]{16}'),
         ]],
         securityCode: ['', [
           Validators.required,
-          Validators.minLength(2),
-          CustomValidators.notOnlyWhiteSpace
+          Validators.pattern('[0-9]{3}'),
         ]],
-        expirationMonth: ['', [
-          Validators.required,
-          Validators.minLength(2),
-          CustomValidators.notOnlyWhiteSpace
-        ]],
-        expirationYear: ['', [
-          Validators.required,
-          Validators.minLength(2),
-          CustomValidators.notOnlyWhiteSpace
-        ]]
+        expirationMonth: [''],
+        expirationYear: ['']
       })
     });
 
@@ -167,12 +161,20 @@ export class CheckoutComponent {
 
     this.cardFormService.getCountries().subscribe(data => {
       this.countries = data;
-    })
+    });
+    this.reviewCartDetails();
   }
 
 
 
-
+  reviewCartDetails() {
+    this.cartService.totalPrice.subscribe(data => {
+      this.totalPrice = data;
+    });
+    this.cartService.totalQuantity.subscribe(data => {
+      this.totalQuantity = data;
+    });
+  }
 
 
   copyShippingAdd(event) {

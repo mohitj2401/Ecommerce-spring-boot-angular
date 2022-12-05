@@ -28,10 +28,6 @@ export class CartDetailsComponent {
     this.cartService.totalPrice.subscribe(data => this.totalPrice = data);
     this.cartService.totalQuantity.subscribe(data => this.totalQuantity = data);
     this.cartItems = this.cartService.cartItems;
-    this.cartItems.forEach(element => {
-      this.totalPrice += element.unitPrice * element.quantity;
-      this.totalQuantity += element.quantity;
-    });
 
   }
   increamentQuantity(cartItem: CartItem) {
