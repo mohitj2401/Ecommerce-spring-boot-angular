@@ -1,3 +1,8 @@
+import { OrderItem } from './../../model/order-item';
+import { Order } from './../../model/order';
+import { Purchase } from './../../model/purchase';
+import { Router } from '@angular/router';
+import { CheckoutService } from './../../services/checkout.service';
 import { CartService } from './../../services/cart.service';
 import { CustomValidators } from './../../validators/custom-validators';
 import { State } from './../../model/state';
@@ -36,14 +41,14 @@ export class CheckoutComponent {
   get shippingAddressState() { return this.checkoutFormGroup.get('shippingAddress.state'); }
   get shippingAddressCity() { return this.checkoutFormGroup.get('shippingAddress.city'); }
   get shippingAddressCountry() { return this.checkoutFormGroup.get('shippingAddress.country'); }
-  get shippingAddressZipcode() { return this.checkoutFormGroup.get('shippingAddress.zipcode'); }
+  get shippingAddressZipCode() { return this.checkoutFormGroup.get('shippingAddress.zipcode'); }
 
   //Billing Address
   get billingAddressStreet() { return this.checkoutFormGroup.get('billingAddress.street'); }
   get billingAddressState() { return this.checkoutFormGroup.get('billingAddress.state'); }
   get billingAddressCity() { return this.checkoutFormGroup.get('billingAddress.city'); }
   get billingAddressCountry() { return this.checkoutFormGroup.get('billingAddress.country'); }
-  get billingAddressZipcode() { return this.checkoutFormGroup.get('billingAddress.zipcode'); }
+  get billingAddressZipCode() { return this.checkoutFormGroup.get('billingAddress.zipcode'); }
 
   //CreditCard
   get creditCardType() { return this.checkoutFormGroup.get('creditCard.cardType'); }
@@ -51,7 +56,8 @@ export class CheckoutComponent {
   get creditCardcardNumber() { return this.checkoutFormGroup.get('creditCard.cardNumber'); }
   get creditCardsecurityCode() { return this.checkoutFormGroup.get('creditCard.securityCode'); }
 
-  constructor(private formBuilder: FormBuilder, private cardFormService: CardFormService, private cartService: CartService) {
+  constructor(private formBuilder: FormBuilder, private cardFormService: CardFormService, private cartService: CartService, private checkoutService: CheckoutService, private router: Router) {
+
   }
 
 
@@ -93,7 +99,7 @@ export class CheckoutComponent {
         country: ['', [
           Validators.required,
         ]],
-        zipcode: ['', [
+        zipCode: ['', [
           Validators.required,
           Validators.minLength(2),
           CustomValidators.notOnlyWhiteSpace
@@ -118,7 +124,7 @@ export class CheckoutComponent {
           Validators.required,
 
         ]],
-        zipcode: ['', [
+        zipCode: ['', [
           Validators.required,
           Validators.minLength(2),
           CustomValidators.notOnlyWhiteSpace
@@ -208,7 +214,6 @@ export class CheckoutComponent {
   getStates(formType: string) {
     const formGroup = this.checkoutFormGroup.get(formType);
     const countryCode = formGroup?.value.country.code;
-    const countryName = formGroup?.value.country.name;
     this.cardFormService.getStates(countryCode).subscribe(data => {
 
       if (formType == 'shippingAddress') {
@@ -224,6 +229,51 @@ export class CheckoutComponent {
   onSubmit() {
     if (this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched();
+      return;
     }
+    let order = new Order();
+    order.totalPrice = this.totalPrice;
+    order.totalQuantity = this.totalQuantity;
+
+    const cartItems = this.cartService.cartItems;
+
+    let orderItems: OrderItem[] = cartItems.map(x => new OrderItem(x));
+
+    let purchase = new Purchase();
+
+    purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
+    const shippingAddressCountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country));
+    purchase.shippingAddress.country = shippingAddressCountry.name;
+
+    purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
+    const billingAddressCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country));
+    purchase.billingAddress.country = billingAddressCountry.name;
+
+
+    purchase.orderItems = orderItems;
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+
+    purchase.order = order;
+
+
+    this.checkoutService.placeOrder(purchase).subscribe({
+      next: (data) => {
+        alert(`Your order has been recieved.\n Order number: ${data.orderTrackingNumber}`);
+        this.resetCart();
+      },
+      error: (error) => {
+        alert(`Something went wrong please try again.${error.message}`);
+      },
+    });
+
   }
+
+  resetCart() {
+    this.cartService.cartItems = [];
+    this.cartService.totalPrice.next(0);
+    this.cartService.totalQuantity.next(0);
+    this.checkoutFormGroup.reset();
+    this.router.navigateByUrl("/products");
+  }
+
 }
