@@ -1,50 +1,88 @@
-<div class="page-wrapper">
-  <!-- MENU SIDEBAR-->
-  <aside class="menu-sidebar d-none d-lg-block">
-    <div class="logo">
-      <a routerLink="/products">
-        <img
-          src="assets/images/logo.png"
-          alt="luv2shop"
-          class="img-responsive"
-        />
+<!-- Topbar Start -->
+<div class="container-fluid">
+  <!-- <div class="row bg-secondary py-2 px-xl-5">
+          <div class="col-lg-6 d-none d-lg-block">
+              <div class="d-inline-flex align-items-center">
+                  <a class="text-dark" href="">FAQs</a>
+                  <span class="text-muted px-2">|</span>
+                  <a class="text-dark" href="">Help</a>
+                  <span class="text-muted px-2">|</span>
+                  <a class="text-dark" href="">Support</a>
+              </div>
+          </div>
+          <div class="col-lg-6 text-center text-lg-right">
+              <div class="d-inline-flex align-items-center">
+                  <a class="text-dark px-2" href="">
+                      <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a class="text-dark px-2" href="">
+                      <i class="fab fa-twitter"></i>
+                  </a>
+                  <a class="text-dark px-2" href="">
+                      <i class="fab fa-linkedin-in"></i>
+                  </a>
+                  <a class="text-dark px-2" href="">
+                      <i class="fab fa-instagram"></i>
+                  </a>
+                  <a class="text-dark pl-2" href="">
+                      <i class="fab fa-youtube"></i>
+                  </a>
+              </div>
+          </div>
+      </div> -->
+
+  <div class="row align-items-center py-3 px-xl-5">
+    <div class="col-lg-3 d-none d-lg-block">
+      <a href="" class="text-decoration-none">
+        <h1 class="m-0 display-5 font-weight-semi-bold">
+          <span class="text-primary font-weight-bold border px-3 mr-1">E</span
+          >Shopper
+        </h1>
       </a>
     </div>
-    <div class="menu-sidebar-content js-scrollbar1">
-      <app-product-category></app-product-category>
+    <div class="col-lg-6 col-6 text-left"></div>
+    <div class="col-lg-3 col-6 text-right">
+      <!-- <a href="" class="btn border">
+                  <i class="fas fa-heart text-primary"></i>
+                  <span class="badge">0</span>
+              </a> -->
+      <a href="" class="btn">Home</a>
+      <a href="" class="btn">Login</a>
+      <a href="" class="btn">Register</a>
+      <a href="" class="btn border">
+        <i class="fas fa-shopping-cart text-primary"></i>
+        <span class="badge">0</span>
+      </a>
     </div>
-  </aside>
-  <!-- END MENU SIDEBAR-->
-  <!-- PAGE CONTAINER-->
-  <div class="page-container">
-    <!-- HEADER DESKTOP-->
-    <header class="header-desktop">
-      <div class="section-content section-content-p30">
-        <div class="container-fluid">
-          <div class="header-wrap">
-            <app-search></app-search>
-
-            <app-cart-status></app-cart-status>
-          </div>
-          <div class="account-wrap"></div>
-        </div>
-      </div>
-    </header>
-
-    <router-outlet></router-outlet>
-
-    <!-- END HEADER DESKTOP-->
   </div>
 </div>
+<!-- Topbar End -->
 
-<!-- END PAGE CONTAINER-->
+<div class="container-fluid mb-5" style="min-height: 73vh">
+  <router-outlet></router-outlet>
+</div>
 
-<!-- END PAGE CONTAINER-->
+<!-- Footer Start -->
+<div class="container-fluid bg-secondary text-dark mt-5">
+  <div class="row border-top border-light mx-xl-5 py-4">
+    <div class="col-md-6 px-xl-0">
+      <p class="mb-md-0 text-center text-md-left text-dark">
+        &copy;
+        <a class="text-dark font-weight-semi-bold" href="#">Your Site Name</a>.
+        All Rights Reserved. Designed by
+        <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com"
+          >HTML Codex</a
+        >
+      </p>
+    </div>
+    <div class="col-md-6 px-xl-0 text-center text-md-right">
+      <img class="img-fluid" src="img/payments.png" alt="" />
+    </div>
+  </div>
+</div>
+<!-- Footer End -->
 
-<footer>
-  <ul style="margin-bottom: 0">
-    <li><a href="#">About Us</a></li>
-    <li><a href="#">Contact Us</a></li>
-    <li><a href="#">Help</a></li>
-  </ul>
-</footer>
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"
+  ><i class="fa fa-angle-double-up"></i
+></a>

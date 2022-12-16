@@ -1,12 +1,14 @@
-<div class="form-header">
+<div class="input-group">
   <input
-    class="au-input au-input-xl"
-    placeholder="Search for data ..."
     type="text"
+    class="form-control"
+    placeholder="Search for products"
     #searchInput
     (keyup.enter)="searchUpdate(searchInput.value)"
   />
-  <button class="au-btn-submit" (click)="searchUpdate(searchInput.value)">
-    Search
-  </button>
+  <div class="input-group-append">
+    <button class="btn" (click)="searchUpdate(searchInput.value)">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
 </div>

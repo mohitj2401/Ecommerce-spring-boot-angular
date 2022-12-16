@@ -1,5 +1,5 @@
 <!-- MAIN CONTENT-->
-<div class="main-content">
+<!-- <div class="main-content">
   <div class="section-content section-content-p30">
     <div class="container-fluid">
       <div class="row">
@@ -19,13 +19,7 @@
           </div>
         </div>
 
-        <div
-          class="alert alert-warning col-md-12"
-          *ngIf="products == null || products?.length == 0"
-          role="alert"
-        >
-          No products found
-        </div>
+
       </div>
 
       <div class="footer-pagination">
@@ -61,6 +55,128 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- END MAIN CONTENT-->
+<div class="row border-top px-xl-5 pt-5">
+  <div class="col-lg-3 d-none d-lg-block">
+    <a
+      class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
+      data-toggle="collapse"
+      href="#navbar-vertical"
+      style="height: 65px; margin-top: -1px; padding: 0 30px"
+    >
+      <h6 class="m-0">Categories</h6>
+      <i class="fa fa-angle-down text-dark"></i>
+    </a>
+    <app-product-category></app-product-category>
+  </div>
+  <div class="col-lg-9">
+    <nav
+      class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0"
+    >
+      <a href="" class="text-decoration-none d-block d-lg-none">
+        <h1 class="m-0 display-5 font-weight-semi-bold">
+          <span class="text-primary font-weight-bold border px-3 mr-1">E</span
+          >Shopper
+        </h1>
+      </a>
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-toggle="collapse"
+        data-target="#navbarCollapse"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="collapse navbar-collapse justify-content-between"
+        id="navbarCollapse"
+      >
+        <div class="navbar-nav ml-auto py-0">
+          <app-search></app-search>
+        </div>
+      </div>
+    </nav>
+    <div class="row p-3">
+      <div
+        class="col-lg-3 col-md-6 col-sm-12 pb-1"
+        *ngFor="let product of products"
+      >
+        <div class="card product-item border-0 mb-4">
+          <div
+            class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
+          >
+            <img
+              class="img-fluid w-100"
+              src="http://localhost:4200/{{ product.imageUrl }}"
+              alt=""
+            />
+          </div>
+          <div
+            class="card-body border-left border-right text-center p-0 pt-4 pb-3"
+          >
+            <h6 class="text-truncate mb-3">{{ product.name }}</h6>
+            <div class="d-flex justify-content-center">
+              <h6>{{ product.unitPrice | currency : "INR" }}</h6>
+              <h6 class="text-muted ml-2"><del>$123.00</del></h6>
+            </div>
+          </div>
+          <div
+            class="card-footer d-flex justify-content-between bg-light border"
+          >
+            <a
+              routerLink="/products/{{ product.id }}"
+              class="btn btn-sm text-dark p-0"
+              ><i class="fas fa-eye text-primary mr-1"></i>View Detail</a
+            >
+            <button
+              (click)="addToCart(product)"
+              class="btn btn-sm text-dark p-0"
+            >
+              <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="alert alert-warning col-md-12"
+        *ngIf="products == null || products?.length == 0"
+        role="alert"
+      >
+        No products found
+      </div>
+    </div>
+    <div class="footer-pagination">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-9">
+              <ngb-pagination
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [collectionSize]="toialElements"
+                (pageChange)="listProducts()"
+                [maxSize]="5"
+                [boundaryLinks]="true"
+              >
+              </ngb-pagination>
+            </div>
+            <div class="col-md-3 mt-2" style="text-align: right">
+              <span class="mr-2">Page Size </span>
+              <select (change)="updatePageSize($event)">
+                <option value="5" selected>5</option>
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
