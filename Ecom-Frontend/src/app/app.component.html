@@ -46,13 +46,14 @@
                   <i class="fas fa-heart text-primary"></i>
                   <span class="badge">0</span>
               </a> -->
-      <a href="" class="btn">Home</a>
-      <a href="" class="btn">Login</a>
-      <a href="" class="btn">Register</a>
-      <a href="" class="btn border">
-        <i class="fas fa-shopping-cart text-primary"></i>
-        <span class="badge">0</span>
-      </a>
+      <a routerLink="/products" class="btn">Home</a>
+      <a routerLink="/profile" *ngIf="loggedIn" class="btn">Profile</a>
+
+      <a routerLink="login" class="btn" *ngIf="!loggedIn">Login</a>
+      <button class="btn" (click)="logout()" *ngIf="loggedIn">Logout</button>
+      <a routerLink="register" class="btn" *ngIf="!loggedIn">Register</a>
+
+      <app-cart-status></app-cart-status>
     </div>
   </div>
 </div>

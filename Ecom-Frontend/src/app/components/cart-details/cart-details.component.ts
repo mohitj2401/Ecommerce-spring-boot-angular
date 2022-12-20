@@ -31,7 +31,7 @@ export class CartDetailsComponent {
 
   }
   increamentQuantity(cartItem: CartItem) {
-    this.cartService.addToCart(cartItem);
+    this.cartService.increamentQuantity(cartItem);
 
 
   }

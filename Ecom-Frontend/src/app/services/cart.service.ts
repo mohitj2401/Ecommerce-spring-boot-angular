@@ -18,7 +18,7 @@ export class CartService {
 
 
     if (tempCart) {
-      tempCart.quantity++;
+      tempCart.quantity = tempCart.quantity + cartItem.quantity;
     } else {
       this.cartItems.push(cartItem);
     }
@@ -43,6 +43,13 @@ export class CartService {
     } else {
       this.computeCartTotal();
     }
+  }
+
+  increamentQuantity(cartItem: CartItem) {
+    cartItem.quantity++;
+
+    this.computeCartTotal();
+
   }
   removeItem(cartItem: CartItem) {
     var index = this.cartItems.findIndex((x) => x.productId == cartItem.productId);

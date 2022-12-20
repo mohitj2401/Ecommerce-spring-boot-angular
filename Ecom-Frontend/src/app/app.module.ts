@@ -1,3 +1,4 @@
+import { authInterceptorProviders } from './helpers/auth.interceptor';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProductService } from './services/product.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -42,7 +43,7 @@ import { HomeComponent } from './components/home/home.component';
     NgbPaginationModule,
     ReactiveFormsModule
   ],
-  providers: [ProductService],
+  providers: [ProductService, authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,8 +1,9 @@
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 const AUTH_API = 'http://localhost:8080/api/auth/';
+const AUTH_API_2 = 'http://localhost:8080/api/test';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -11,6 +12,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
+  isLoggedIn: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
@@ -27,5 +30,9 @@ export class AuthService {
       password
     }, httpOptions).pipe();
 
+  }
+
+  checkAuthenticate() {
+    return this.http.get(AUTH_API_2 + '/username').pipe();
   }
 }

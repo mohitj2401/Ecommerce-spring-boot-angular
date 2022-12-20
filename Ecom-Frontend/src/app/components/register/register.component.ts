@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { TokenStorageService } from './../../services/token-storage.service';
 import { CustomValidators } from './../../validators/custom-validators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from './../../services/auth.service';
@@ -17,13 +19,18 @@ export class RegisterComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) { }
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private tokenStorage: TokenStorageService, private router: Router) { }
 
   get email() { return this.customer.get('email'); }
   get username() { return this.customer.get('username'); }
   get password() { return this.customer.get('password'); }
 
   ngOnInit(): void {
+    if (this.tokenStorage.getToken()) {
+
+
+      this.router.navigateByUrl("/profile");
+    }
     this.customer = this.formBuilder.group({
       username: ['', [
         Validators.required,

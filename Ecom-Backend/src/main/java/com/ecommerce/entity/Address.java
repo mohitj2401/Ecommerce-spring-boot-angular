@@ -19,6 +19,18 @@ public class Address {
 	@Column(name = "id")
 	private Long id;
 
+	@Column(name = "first_name")
+	private String firstName;
+
+	@Column(name = "last_name")
+	private String lastName;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "phone")
+	private String phone;
+
 	@Column(name = "city")
 	private String city;
 
@@ -30,6 +42,9 @@ public class Address {
 
 	@Column(name = "street")
 	private String street;
+
+	@Column(name = "street2", nullable = true)
+	private String street2;
 
 	@Column(name = "zip_code")
 	private String zipCode;

@@ -11,7 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,6 +39,9 @@ public class Order {
 	@Column(name = "total_quantity")
 	private int totalQuantity;
 
+	@Column(name = "user_id")
+	private Long userId;
+
 	@Column(name = "total_price")
 	private BigDecimal totalPrice;
 
@@ -62,9 +64,9 @@ public class Order {
 	@JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
 	private Address shippingAddress;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customer_id", nullable = false)
-	private Customer customer;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private User user;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private Set<OrderItem> orderItems = new HashSet<>();

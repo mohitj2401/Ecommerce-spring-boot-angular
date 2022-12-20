@@ -26,6 +26,7 @@ export class LoginComponent {
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
+      this.router.navigateByUrl("/profile");
     }
     this.customer = this.formBuilder.group({
       username: ['', [
@@ -60,12 +61,14 @@ export class LoginComponent {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-
+        this.authService.isLoggedIn.next(true);
         this.router.navigateByUrl("/profile");
       },
       error: err => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
+        this.authService.isLoggedIn.next(false);
+
       }
     });
   }

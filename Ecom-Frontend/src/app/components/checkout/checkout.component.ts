@@ -1,3 +1,4 @@
+import { CartItem } from './../../model/cart_item';
 import { WindowRefService } from './../../services/window-ref.service';
 import { OrderItem } from './../../model/order-item';
 import { Order } from './../../model/order';
@@ -28,6 +29,7 @@ export class CheckoutComponent {
   countries: Country[] = [];
   shippingAddressStates: State[] = [];
   billingAddressStates: State[] = [];
+  cartItems: CartItem[] = [];
 
 
   //Getters
@@ -38,18 +40,26 @@ export class CheckoutComponent {
   get email() { return this.checkoutFormGroup.get('customer.email'); }
 
   //Shippinh Address
+  get shippingAddresslastName() { return this.checkoutFormGroup.get('shippingAddress.lastName'); }
+  get shippingAddressemail() { return this.checkoutFormGroup.get('shippingAddress.email'); }
+  get shippingAddressphone() { return this.checkoutFormGroup.get('shippingAddress.phone'); }
+  get shippingAddressfirstName() { return this.checkoutFormGroup.get('shippingAddress.firstName'); }
   get shippingAddressStreet() { return this.checkoutFormGroup.get('shippingAddress.street'); }
   get shippingAddressState() { return this.checkoutFormGroup.get('shippingAddress.state'); }
   get shippingAddressCity() { return this.checkoutFormGroup.get('shippingAddress.city'); }
   get shippingAddressCountry() { return this.checkoutFormGroup.get('shippingAddress.country'); }
-  get shippingAddressZipCode() { return this.checkoutFormGroup.get('shippingAddress.zipcode'); }
+  get shippingAddressZipCode() { return this.checkoutFormGroup.get('shippingAddress.zipCode'); }
 
   //Billing Address
+  get billingAddresslastName() { return this.checkoutFormGroup.get('billingAddress.lastName'); }
+  get billingAddressemail() { return this.checkoutFormGroup.get('billingAddress.email'); }
+  get billingAddressphone() { return this.checkoutFormGroup.get('billingAddress.phone'); }
+  get billingAddressfirstName() { return this.checkoutFormGroup.get('billingAddress.firstName'); }
   get billingAddressStreet() { return this.checkoutFormGroup.get('billingAddress.street'); }
   get billingAddressState() { return this.checkoutFormGroup.get('billingAddress.state'); }
   get billingAddressCity() { return this.checkoutFormGroup.get('billingAddress.city'); }
   get billingAddressCountry() { return this.checkoutFormGroup.get('billingAddress.country'); }
-  get billingAddressZipCode() { return this.checkoutFormGroup.get('billingAddress.zipcode'); }
+  get billingAddressZipCode() { return this.checkoutFormGroup.get('billingAddress.zipCode'); }
 
   //CreditCard
   get creditCardType() { return this.checkoutFormGroup.get('creditCard.cardType'); }
@@ -67,7 +77,8 @@ export class CheckoutComponent {
       this.router.navigateByUrl("/products");
     }
     this.checkoutFormGroup = this.formBuilder.group({
-      customer: this.formBuilder.group({
+
+      shippingAddress: this.formBuilder.group({
         firstName: ['', [
           Validators.required,
           Validators.minLength(2),
@@ -83,9 +94,7 @@ export class CheckoutComponent {
           Validators.required,
           // Validators.minLength(2),
           Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
-        ]]
-      }),
-      shippingAddress: this.formBuilder.group({
+        ]],
         street: ['', [
           Validators.required,
           Validators.minLength(2),
@@ -101,6 +110,10 @@ export class CheckoutComponent {
         ]],
         country: ['', [
           Validators.required,
+        ]],
+        phone: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{10}'),
         ]],
         zipCode: ['', [
           Validators.required,
@@ -109,6 +122,26 @@ export class CheckoutComponent {
         ]]
       }),
       billingAddress: this.formBuilder.group({
+        firstName: ['', [
+          Validators.required,
+          Validators.minLength(2),
+          CustomValidators.notOnlyWhiteSpace
+        ]],
+        lastName: ['', [
+          Validators.required,
+          Validators.minLength(2),
+          CustomValidators.notOnlyWhiteSpace
+
+        ]],
+        email: ['', [
+          Validators.required,
+          // Validators.minLength(2),
+          Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")
+        ]],
+        phone: ['', [
+          Validators.required,
+          Validators.pattern('[0-9]{10}'),
+        ]],
         street: ['', [
           Validators.required,
           Validators.minLength(2),
@@ -133,26 +166,7 @@ export class CheckoutComponent {
           CustomValidators.notOnlyWhiteSpace
         ]]
       }),
-      creditCard: this.formBuilder.group({
-        cardType: ['', [
-          Validators.required,
-        ]],
-        nameOnCard: ['', [
-          Validators.required,
-          Validators.minLength(2),
-          CustomValidators.notOnlyWhiteSpace
-        ]],
-        cardNumber: ['', [
-          Validators.required,
-          Validators.pattern('[0-9]{16}'),
-        ]],
-        securityCode: ['', [
-          Validators.required,
-          Validators.pattern('[0-9]{3}'),
-        ]],
-        expirationMonth: [''],
-        expirationYear: ['']
-      })
+
     });
 
     const startMonth = new Date().getMonth() + 1;
@@ -183,18 +197,19 @@ export class CheckoutComponent {
     this.cartService.totalQuantity.subscribe(data => {
       this.totalQuantity = data;
     });
+    this.cartItems = this.cartService.cartItems;
   }
 
 
   copyShippingAdd(event) {
     if (event.target.checked) {
 
-      this.checkoutFormGroup.controls['billingAddress'].setValue(this.checkoutFormGroup.controls['shippingAddress'].value);
-      this.billingAddressStates = this.shippingAddressStates;
+      this.checkoutFormGroup.controls['shippingAddress'].setValue(this.checkoutFormGroup.controls['billingAddress'].value);
+      this.shippingAddressStates = this.billingAddressStates;
 
     } else {
-      this.checkoutFormGroup.controls['billingAddress'].reset();
-      this.billingAddressStates = [];
+      this.checkoutFormGroup.controls['shippingAddress'].reset();
+      this.shippingAddressStates = [];
     }
 
   }
@@ -254,23 +269,26 @@ export class CheckoutComponent {
 
 
     purchase.orderItems = orderItems;
-    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+    // purchase.customer = this.checkoutFormGroup.controls['customer'].value;
 
     purchase.order = order;
 
-    this.payWithRazor('11');
+
+    this.payWithRazor('11', purchase);
+
+
+  }
+  makeOrder(purchase: Purchase) {
     this.checkoutService.placeOrder(purchase).subscribe({
       next: (data) => {
         alert(`Your order has been recieved.\n Order number: ${data.orderTrackingNumber}`);
         this.resetCart();
       },
       error: (error) => {
-        alert(`Something went wrong please try again.${error.message}`);
+        alert(`Please login first.${error.status}`);
       },
     });
-
   }
-
   resetCart() {
     this.cartService.cartItems = [];
     this.cartService.totalPrice.next(0);
@@ -278,10 +296,10 @@ export class CheckoutComponent {
     this.checkoutFormGroup.reset();
     this.router.navigateByUrl("/products");
   }
-  payWithRazor(val) {
+  payWithRazor(val, purchase) {
     const options: any = {
       key: 'rzp_test_s04L6ldGetC8Q9',
-      amount: 125500, // amount should be in paise format to display Rs 1255 without decimal point
+      amount: purchase.order.totalPrice * 100, // amount should be in paise format to display Rs 1255 without decimal point
       currency: 'INR',
       name: '', // company name or product name
       description: '',  // product description
@@ -302,7 +320,7 @@ export class CheckoutComponent {
       options.response = response;
       console.log(response);
       console.log(options);
-      // call your backend api to verify payment signature & capture transaction
+      this.makeOrder(purchase);
     });
     options.modal.ondismiss = (() => {
       // handle the case when user closes the form while transaction is in progress
