@@ -1,65 +1,61 @@
-<div class="col-md-6">
-  <div class="card card-container">
-    <img
-      id="profile-img"
-      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-      class="profile-img-card"
-      style="max-height: 100px"
-    />
-    <form [formGroup]="customer" name="form" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" formControlName="username" />
-        <div
-          *ngIf="username?.invalid && (username?.dirty || username?.touched)"
-          class="alert alert-danger mt-1"
-        >
+<div class="row border-top px-xl-5 pt-5" style="justify-content: center">
+  <div class="col-md-6">
+    <div class="card card-container" style="align-items: center; border: none">
+      <img
+        id="profile-img"
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        class="profile-img-card"
+        style="max-height: 100px"
+      />
+      <form [formGroup]="customer" name="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" formControlName="username" />
           <div
-            *ngIf="
-              (username?.errors)!['required'] ||
-              (username?.errors)!['notOnlyWhiteSpace']
-            "
+            *ngIf="username?.invalid && (username?.dirty || username?.touched)"
+            class="alert alert-danger mt-1"
           >
-            Username is required
-          </div>
-
-          <div *ngIf="(username?.errors)!['minlength']">
-            Atleast 3 characters long
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          formControlName="password"
-        />
-        <div
-          *ngIf="password?.invalid && (password?.dirty || password?.touched)"
-          class="alert alert-danger mt-1"
-        >
-          <div *ngIf="(password?.errors)!['required']">
-            password is required
-          </div>
-
-          <div *ngIf="(password?.errors)!['minlength']">
-            Password must be 7 character long
+            <div
+              *ngIf="
+                (username?.errors)!['required'] ||
+                (username?.errors)!['notOnlyWhiteSpace']
+              "
+            >
+              Username is required
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
-      </div>
 
-      <div class="alert alert-warning" *ngIf="isLoginFailed">
-        Signup failed!<br />{{ errorMessage }}
-      </div>
-    </form>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password"
+          />
+          <div
+            *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+            class="alert alert-danger mt-1"
+          >
+            <div *ngIf="(password?.errors)!['required']">
+              password is required
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" type="submit">
+            Sign Up
+          </button>
+        </div>
 
-    <div class="alert alert-success" *ngIf="isLoggedIn">
-      Your registration is successful!
+        <div class="alert alert-warning" *ngIf="isLoginFailed">
+          Invailed username or password
+        </div>
+      </form>
+
+      <div class="alert alert-success" *ngIf="isLoggedIn">
+        Your registration is successful!
+      </div>
     </div>
   </div>
 </div>

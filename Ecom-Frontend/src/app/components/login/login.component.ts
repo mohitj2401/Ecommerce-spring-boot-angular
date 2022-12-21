@@ -31,12 +31,12 @@ export class LoginComponent {
     this.customer = this.formBuilder.group({
       username: ['', [
         Validators.required,
-        Validators.minLength(3),
+
         CustomValidators.notOnlyWhiteSpace
       ]],
       password: ['', [
         Validators.required,
-        Validators.minLength(7),
+
         CustomValidators.notOnlyWhiteSpace
       ]],
     });
@@ -65,7 +65,9 @@ export class LoginComponent {
         this.router.navigateByUrl("/profile");
       },
       error: err => {
-        this.errorMessage = err.error.message;
+        console.log(err);
+
+        // this.errorMessage = err.error.message;
         this.isLoginFailed = true;
         this.authService.isLoggedIn.next(false);
 

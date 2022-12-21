@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { CartItem } from './../../model/cart_item';
 import { WindowRefService } from './../../services/window-ref.service';
 import { OrderItem } from './../../model/order-item';
@@ -30,7 +31,7 @@ export class CheckoutComponent {
   shippingAddressStates: State[] = [];
   billingAddressStates: State[] = [];
   cartItems: CartItem[] = [];
-
+  loggedIn: boolean = false;
 
   //Getters
 
@@ -67,7 +68,7 @@ export class CheckoutComponent {
   get creditCardcardNumber() { return this.checkoutFormGroup.get('creditCard.cardNumber'); }
   get creditCardsecurityCode() { return this.checkoutFormGroup.get('creditCard.securityCode'); }
 
-  constructor(private formBuilder: FormBuilder, private cardFormService: CardFormService, private cartService: CartService, private checkoutService: CheckoutService, private router: Router, private winRef: WindowRefService) {
+  constructor(private formBuilder: FormBuilder, private cardFormService: CardFormService, private cartService: CartService, private checkoutService: CheckoutService, private router: Router, private winRef: WindowRefService, private authService: AuthService) {
 
   }
 
@@ -186,6 +187,7 @@ export class CheckoutComponent {
       this.countries = data;
     });
     this.reviewCartDetails();
+    this.authService.isLoggedIn.subscribe(data => this.loggedIn = data);
   }
 
 
@@ -245,6 +247,10 @@ export class CheckoutComponent {
   }
 
   onSubmit() {
+    if (!this.loggedIn) {
+      alert("please login first");
+      this.router.navigateByUrl("login");
+    }
     if (this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched();
       return;

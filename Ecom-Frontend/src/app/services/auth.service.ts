@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 const AUTH_API = 'http://localhost:8080/api/auth/';
-const AUTH_API_2 = 'http://localhost:8080/api/test';
+const AUTH_API_2 = 'http://localhost:8080/api/users';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };

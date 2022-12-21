@@ -18,12 +18,18 @@ export class AppComponent {
 
     this.authService.isLoggedIn.subscribe(data => this.loggedIn = data);
 
-    this.authService.checkAuthenticate().subscribe(data => {
-      if (data["id"] != null) {
+    this.authService.checkAuthenticate().subscribe({
+      next: data => {
+        if (data["id"] != null) {
+          this.loggedIn = true;
+          this.authService.isLoggedIn.next(true);
+        } else {
+          this.loggedIn = false;
+          this.authService.isLoggedIn.next(false);
+        }
+      },
+      error: err => {
         this.loggedIn = true;
-        this.authService.isLoggedIn.next(true);
-      } else {
-        this.loggedIn = false;
         this.authService.isLoggedIn.next(false);
       }
     });
