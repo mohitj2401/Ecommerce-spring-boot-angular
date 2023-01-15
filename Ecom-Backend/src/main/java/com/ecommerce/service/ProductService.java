@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,9 @@ public class ProductService {
 
 	@Autowired
 	ProductRepository repository;
+
+	@Autowired
+	FilesStorageService filesStorageService;
 
 	public SimplePage<ProductDTO> getAllProduct(Integer pageNo, Integer pageSize, String sortBy) {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
@@ -96,5 +100,10 @@ public class ProductService {
 			return null;
 		}
 
+	}
+
+	public Resource getProductImageById(String imageUrl) {
+
+		return filesStorageService.load(imageUrl);
 	}
 }

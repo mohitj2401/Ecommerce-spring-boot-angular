@@ -3,6 +3,7 @@ package com.ecommerce.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -64,6 +65,12 @@ public class ProductController {
 
 		}
 		return new ResponseEntity<>(product, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/image/{imageUrl}")
+	public Resource getProductImageById(@PathVariable String imageUrl) {
+		return service.getProductImageById(imageUrl);
 
 	}
 
