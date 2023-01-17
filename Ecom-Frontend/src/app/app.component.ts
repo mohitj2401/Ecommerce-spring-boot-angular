@@ -29,7 +29,9 @@ export class AppComponent {
         }
       },
       error: err => {
-        this.loggedIn = true;
+
+
+        this.loggedIn = false;
         this.authService.isLoggedIn.next(false);
       }
     });

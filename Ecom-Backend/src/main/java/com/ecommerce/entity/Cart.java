@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,11 +32,14 @@ public class Cart {
 	@Column(name = "id")
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@Column(name = "user_id")
+	private Long userId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private User user;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cart_details")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
 	private Set<CartDetail> cartDetails = new HashSet<>();
 
 	@Column(name = "total_amount")
@@ -58,6 +62,16 @@ public class Cart {
 			totalAmount = item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())).add(totalAmount);
 			item.setCart(this);
 		}
+	}
+
+	public BigDecimal getTotalAmount() {
+		totalAmount = BigDecimal.valueOf(0);
+		for (CartDetail cartDetail : this.cartDetails) {
+			totalAmount = cartDetail.getUnitPrice().multiply(BigDecimal.valueOf(cartDetail.getQuantity()))
+					.add(totalAmount);
+
+		}
+		return totalAmount;
 	}
 
 }

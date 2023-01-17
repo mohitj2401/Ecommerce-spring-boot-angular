@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { CartItem } from './../model/cart_item';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -6,13 +7,14 @@ import { BehaviorSubject, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class CartService {
+  base_url: string = 'http://localhost:8080/api/cart/get';
   cartItems: CartItem[] = [];
 
   totalPrice: Subject<number> = new BehaviorSubject<number>(0);
 
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
   addToCart(cartItem: CartItem) {
     var tempCart = this.cartItems.find((x) => x.productId == cartItem.productId);
 
@@ -57,5 +59,13 @@ export class CartService {
       this.cartItems.splice(index, 1);
       this.computeCartTotal();
     }
+  }
+
+  addtoCartDb() {
+
+    return this.httpClient.get(this.base_url).pipe();
+
+
+
   }
 }

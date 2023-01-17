@@ -33,7 +33,7 @@ public class JwtUtils {
 
 		return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + 86400000))
-				.signWith(SignatureAlgorithm.HS512, "bezKoderSecretKey").compact();
+				.signWith(SignatureAlgorithm.HS512, "first_ecom_project").compact();
 	}
 
 	public String getUserNameFromJwtToken(String token) {
