@@ -23,6 +23,7 @@ export class RegisterComponent implements OnInit {
 
   get email() { return this.customer.get('email'); }
   get username() { return this.customer.get('username'); }
+  get name() { return this.customer.get('name'); }
   get password() { return this.customer.get('password'); }
 
   ngOnInit(): void {
@@ -33,6 +34,11 @@ export class RegisterComponent implements OnInit {
     }
     this.customer = this.formBuilder.group({
       username: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        CustomValidators.notOnlyWhiteSpace
+      ]],
+      name: ['', [
         Validators.required,
         Validators.minLength(3),
         CustomValidators.notOnlyWhiteSpace
@@ -58,13 +64,17 @@ export class RegisterComponent implements OnInit {
     }
 
 
-    const { username, email, password } = this.customer.value;
+    const { username, email, password, name } = this.customer.value;
 
-    this.authService.register(username, email, password).subscribe({
+    this.authService.register(username, email, password, name).subscribe({
       next: data => {
-        console.log(data);
+
         this.isSuccessful = true;
         this.isSignUpFailed = false;
+        this.tokenStorage.saveToken(data.token);
+        this.tokenStorage.saveUser(data);
+        this.authService.isLoggedIn.next(true);
+        this.router.navigateByUrl("/profile");
       },
       error: err => {
         this.errorMessage = err.error.message;

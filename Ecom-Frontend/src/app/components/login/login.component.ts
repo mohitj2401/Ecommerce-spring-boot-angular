@@ -60,7 +60,7 @@ export class LoginComponent {
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        this.roles = this.tokenStorage.getUser().roles;
+        // this.roles = this.tokenStorage.getUser().roles;
         this.authService.isLoggedIn.next(true);
         this.router.navigateByUrl("/profile");
       },

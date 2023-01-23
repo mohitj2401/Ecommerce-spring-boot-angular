@@ -11,6 +11,7 @@ export class AppComponent {
   loggedIn: boolean = false;
 
   constructor(private authService: AuthService) {
+    // this.logout();
 
   }
 
