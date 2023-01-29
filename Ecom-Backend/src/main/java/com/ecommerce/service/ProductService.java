@@ -31,7 +31,8 @@ public class ProductService {
 	FilesStorageService filesStorageService;
 
 	public SimplePage<ProductDTO> getAllProduct(Integer pageNo, Integer pageSize, String sortBy) {
-		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "category_id"));
+
 		Page<Product> products = repository.findAll(paging);
 //		List<Product> products = repository.findAll();
 		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
